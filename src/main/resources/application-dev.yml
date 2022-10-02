@@ -7,3 +7,4 @@ server:
 spring:
   sleuth:
     enabled: true
+ 
