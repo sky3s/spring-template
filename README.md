@@ -5,19 +5,19 @@
 ### Milestone 0 | Base Code:
 Basic configuration completed. Application can be run. This is base module.
 
-### Milestone 2:
+### Milestone 1 | Message:
 Message & error handling features [message-module] added. 
 
-### Milestone 3:
+### Milestone 2 | OpenApi:
 OpenApi features [openapi-module] added.
 
-### Milestone 4:
+### Milestone 3 | Database:
 Hibernate JPA features [database-module] added.
 
-### Milestone 5:
+### Milestone 4 | Rest Template:
 RestTemplate features [rest-template-module] added.
 
-### Milestone 6:
+### Milestone 5 | Security:
 Security features [security-module] added;
 
 
