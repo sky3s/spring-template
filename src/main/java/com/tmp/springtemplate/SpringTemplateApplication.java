@@ -21,3 +21,4 @@ public class SpringTemplateApplication extends SpringBootServletInitializer impl
     }
 
 }
+
