@@ -30,6 +30,7 @@ public class WebConfig implements WebMvcConfigurer {
         return bean;
     }
 
+
     @Bean
     public LocaleResolver localeResolver() {
         AcceptHeaderLocaleResolver slr = new AcceptHeaderLocaleResolver();
