@@ -36,8 +36,8 @@ public class Api {
     private String description;
 
     /**
-     * Bu flag sadece apiId set etme işlemi sırasında kullanılacka bir flag olur başka bir iş için kullanılmamalıdır.
+     * Bu flag sadece apiId set etme işlemi sırasında kullanılacak bir flag olur başka bir iş için kullanılmamalıdır.
      */
-    private Boolean pointerFlag;
+    private Boolean processApiFlag;
 
 }

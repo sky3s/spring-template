@@ -1,6 +1,6 @@
 package com.tmp.springtemplate.extension.request;
 
-import com.tmp.springtemplate.constant.AppHeader;
+import com.tmp.springtemplate.extension.openapi.AppHeader;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
