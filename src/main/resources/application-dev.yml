@@ -1,0 +1,9 @@
+server:
+  tomcat:
+    keep-alive-timeout: -1
+    connection-timeout: 999999999
+  port: 8070
+
+spring:
+  sleuth:
+    enabled: true

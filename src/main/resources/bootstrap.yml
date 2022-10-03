@@ -1,0 +1,106 @@
+app:
+  name: Template Application Backend APIs
+  version: @project.version@
+  domains:
+    - /tmp # http://localhost:8070/tmp
+  custom-paths:
+  #    - /app/**
+  commonSecurityHeaders:
+    API_KEY:
+      key: X-ApiKey
+      name: ApiKeyAuth
+      description: Please enter your apikey
+  commonHeaders:
+    ACCEPT_LANGUAGE:
+      key: Accept-Language
+      required: false
+      defaultValue: TR
+      example: TR
+      description: Requested response language
+  apis:
+    APP_API:
+      apiId: AppApi
+      name: App API
+      groupName: App API
+      description: Spring Template Project App Services
+      path: /app/**
+      #      headers:
+      #        IDENTITY_NUMBER:
+      #          key: X-IdentityNumber
+      #          required: true
+      #          example: 12345678901
+      #          description: Unique identity number of user logged in
+      allowedRoles:
+        - APP
+        - MANAGEMENT
+    MANAGEMENT_API:
+      apiId: ManagementApi
+      name: Management API
+      groupName: Management API
+      description: Sprint Template Project Management Services
+      path: /management/**
+      allowedRoles:
+        - MANAGEMENT
+    TEST_API:
+      apiId: TestApi
+      name: Test API
+      groupName: Test API
+      description: Sprint Template Project Test Services
+      path: /test/**
+      securityHeaders:
+        DEMO_USERNAME:
+          key: X-Username
+          name: Username
+          description: Username of user
+      headers:
+        DEMO_HEADER:
+          key: X-DemoHeader
+          required: false
+          example: 12345678901
+          description: Unique identity number of user logged in
+      allowedRoles:
+        - APP
+        - MANAGEMENT
+
+server:
+  servlet:
+    context-path: /tmp
+    session:
+      cookie:
+        secure: true
+
+springdoc:
+  version: 1.6.11
+  api-docs:
+    path: /api-docs
+    enabled: true
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+    doc-expansion: none
+    display-request-duration: true
+    deep-linking: true
+    show-extensions: true
+    default-model-expand-depth: 1
+    default-models-expand-depth: 1
+    operations-sorter: alpha
+
+spring:
+  application:
+    name: spring-template
+  profiles:
+    active: dev
+  cloud:
+    config:
+      enabled: false
+      fail-fast: false
+
+# configuration for disabling spring actuator endpoints
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "health, refresh"
+    jmx:
+      exposure:
+        exclude: "*"
