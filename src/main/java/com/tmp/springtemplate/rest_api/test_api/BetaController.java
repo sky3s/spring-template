@@ -5,7 +5,7 @@ import com.tmp.springtemplate.module.message.MessageUtils;
 import com.tmp.springtemplate.module.message.exception.ExceptionHelper;
 import com.tmp.springtemplate.extension.messaging.message_key.ExceptionMessageKey;
 import com.tmp.springtemplate.extension.messaging.message_key.ValidationMessageKey;
-import com.tmp.springtemplate.constant.AppHeader;
+import com.tmp.springtemplate.extension.openapi.AppHeader;
 import com.tmp.springtemplate.extension.request.RequestUtils;
 import com.tmp.springtemplate.rest_api.ApiConstants;
 import com.tmp.springtemplate.util.AppConstants;
@@ -38,7 +38,9 @@ public class BetaController {
     )
     //@formatter:on
     @GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Object> betaService() {
+    public ResponseEntity<Object> betaService(
+            @RequestHeader(value = "X-DemoApiParamHeader") String paramHeader
+    ) {
 
         final Map<String, Object> response = new HashMap<>();
         response.put("boolField", true);

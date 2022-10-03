@@ -1,6 +1,6 @@
 package com.tmp.springtemplate.config;
 
-import com.tmp.springtemplate.constant.AppHeader;
+import com.tmp.springtemplate.extension.openapi.AppHeader;
 import com.tmp.springtemplate.util.AppConstants;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;

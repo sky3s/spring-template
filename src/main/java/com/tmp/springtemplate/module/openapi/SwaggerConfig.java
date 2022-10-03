@@ -1,6 +1,6 @@
 package com.tmp.springtemplate.module.openapi;
 
-import com.tmp.springtemplate.constant.AppHeader;
+import com.tmp.springtemplate.extension.openapi.AppHeader;
 import com.tmp.springtemplate.module.openapi.model.Api;
 import com.tmp.springtemplate.module.openapi.model.ApplicationConfig;
 import com.tmp.springtemplate.module.openapi.model.Header;
@@ -15,10 +15,10 @@ import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import io.swagger.v3.oas.models.servers.Server;
 import lombok.AllArgsConstructor;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
 import org.springdoc.core.customizers.OpenApiCustomiser;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -57,15 +57,18 @@ public class SwaggerConfig {
                 .collect(Collectors.toList());
 
         /**
-         * Bu Api için yml configürasyonu
-         * Nedense NULL geldiği durumlar oluyor, bunu kullanırken dikkat etmek lazım
+         * Henüz üzerinde işlem yapılmamış tüm API'ler
          */
-        final Optional<Api> currentApiConfig = applicationConfig
+        final List<Api> apiConfigList = applicationConfig
                 .getApis()
                 .values()
                 .stream()
-                .filter(api -> !Boolean.TRUE.equals(api.getPointerFlag()))
-                .findFirst();
+                .filter(api -> BooleanUtils.isNotTrue(api.getProcessApiFlag())).collect(Collectors.toList());
+
+        /**
+         * Bu Api için yml configürasyonu
+         */
+        final Api currentApiConfig = CollectionUtils.isNotEmpty(apiConfigList) ? apiConfigList.get(0) : null;
 
         /**
          * Ortak headerları ve api bazlı headerleri tek yerde topluyoruz ve topluca oluşturuyoruz.
@@ -74,18 +77,9 @@ public class SwaggerConfig {
         Map<String, Header> headerMap = new HashMap<>();
         headerMap.putAll(applicationConfig.getCommonHeaders());
 
-        if (currentApiConfig.isPresent() && MapUtils.isNotEmpty(currentApiConfig.get().getHeaders())) {
-            headerMap.putAll(currentApiConfig.get().getHeaders());
+        if (Objects.nonNull(currentApiConfig) && MapUtils.isNotEmpty(currentApiConfig.getHeaders())) {
+            headerMap.putAll(currentApiConfig.getHeaders());
         }
-		/*
-		else {
-			applicationConfig.getApis().values().stream().forEach(api -> {
-				if (MapUtils.isNotEmpty(api.getHeaders())) {
-					headerMap.putAll(api.getHeaders());
-				}
-			});
-		}
-		 */
 
         final OpenAPI openAPI = new OpenAPI();
         openAPI
@@ -93,14 +87,13 @@ public class SwaggerConfig {
                 .components(createComponents(openAPI, headerMap))
                 .info(new Info().title(applicationConfig.getName()).version(applicationConfig.getVersion()));
 
-        if (currentApiConfig.isPresent()) {
-            final Api apiConfig = currentApiConfig.get();
+        if (Objects.nonNull(currentApiConfig)) {
 
             /**
              * API özelleştirmeleri için herhangi bir noktada bu API'nin hangi API olduğu anlamak için kullanılacak eşsiz tanımlayıcı.
              */
-            setApiIdentifier(openAPI, apiConfig.getApiId());
-            apiConfig.setPointerFlag(Boolean.TRUE);
+            setApiIdentifier(openAPI, currentApiConfig.getApiId());
+            currentApiConfig.setProcessApiFlag(Boolean.TRUE);
         }
 
         /**
@@ -112,12 +105,14 @@ public class SwaggerConfig {
         addAllSecurityHeadersFromYml(openAPI);
 
         return openAPI;
-
     }
 
+    /**
+     * Uygulama koduna gömülecek default security header'ları varsa burada alınacaklar.
+     * @param openAPI
+     */
     private void addDefaultSecurityHeaders(OpenAPI openAPI) {
 
-        // final List<AppHeaders> defaultAppSecurityHeaders = Arrays.asList(AppHeaders.API_KEY);
         final List<AppHeader> defaultAppSecurityHeaders = null;
 
         final Map<String, SecurityHeader> defaultSecurityHeaders = new HashMap<>();
@@ -209,40 +204,26 @@ public class SwaggerConfig {
     @Bean
     public OpenApiCustomiser customOpenAPIHeaderCustomiser() {
 
-        /**
-         * Map<PathApiForApiWithoutStars, Pair<ApiFromConfig, List<PathItemFromOpenApi>>>
-         *
-         *     Initialization of baseMap
-         */
-        final Map<String, Pair<Api, List<PathItem>>> baseMap = new HashMap<>();
-        applicationConfig.getApis().entrySet().forEach(apiEntry -> {
-            final List<PathItem> pathItemList = new ArrayList<>();
-            final Pair<Api, List<PathItem>> pair = new ImmutablePair<>(apiEntry.getValue(), pathItemList);
-            baseMap.put(apiEntry.getValue().getPath().replace("*", ""), pair);
-        });
-
         //@formatter:off
         return openApi -> {
 
-            final Api currentApiConfig = getApiConfigByIdentifier(openApi);
+            final Api apiConfig = getApiConfigByIdentifier(openApi);
+            final String apiUrlPrefix = apiConfig.getPath().replace("*", "");
+            final List<PathItem> pathItemList = new ArrayList<>();
 
             /**
              * Prepare header - api map for API specific header assignment
              */
             openApi.getPaths().forEach((openApiPathItemUrl, pathItem) -> {
-                baseMap.forEach((apiUrl, baseMapPair) -> {
-                    if (openApiPathItemUrl.startsWith(apiUrl)) {
-                        baseMapPair.getValue().add(pathItem);
-                    }
-                });
+                if (openApiPathItemUrl.startsWith(apiUrlPrefix)) {
+                    pathItemList.add(pathItem);
+                }
             });
 
             /**
              * Add API specific headers to related apis
              */
-            baseMap.values().stream().forEach(apiAndPathItemList -> {
-                apiAndPathItemList.getValue().stream().forEach(pathItem -> addHeaderToPathItem(apiAndPathItemList.getKey().getHeaders(), pathItem));
-            });
+            pathItemList.stream().forEach(pathItem -> addHeaderToPathItem(apiConfig.getHeaders(), pathItem));
 
             /**
              * Add common headers to all apis
@@ -254,7 +235,7 @@ public class SwaggerConfig {
                     .stream()
                     .forEach(pathItem -> addHeaderToPathItem(commonHeaders, pathItem));
 
-            openApi.getInfo().description(StringUtils.defaultString(Optional.ofNullable(currentApiConfig).map(Api::getDescription).orElse(DEFAULT_API_DESCRIPTION)));
+            openApi.getInfo().description(StringUtils.defaultString(Optional.ofNullable(apiConfig).map(Api::getDescription).orElse(DEFAULT_API_DESCRIPTION)));
         };
         //@formatter:on
     }
@@ -266,10 +247,11 @@ public class SwaggerConfig {
                 headerMap.forEach((headerKey, header) -> {
                     final String componentRef = COMPONENTS_PREFIX + header.getKey();
                     /**
-                     Bu header zaten varsa öncelikle eski header silinecek. Definition değiştirince hedaerlar çoklandığı için bunu yapıyoruz.
+                     Bu header zaten varsa yoksayılacak. Var olan bir header tekrar eklenince duplike oluyor. Definition değiştirince hedaerlar çoklandığı için bunu yapıyoruz.
                      */
-                    // TODO BU YEMEDİ
-                    //Optional.ofNullable(operation.getParameters()).orElse(new ArrayList<>()).stream().filter(op -> StringUtils.equals(header.getKey(), op.getName())).forEach(param -> operation.getParameters().remove(param));
+                    if (Optional.ofNullable(operation.getParameters()).orElse(new ArrayList<>()).stream().anyMatch(op -> StringUtils.equals(header.getKey(), op.getName()))) {
+                        return;
+                    }
 
                     /**
                      * Yeni header eklenecek.

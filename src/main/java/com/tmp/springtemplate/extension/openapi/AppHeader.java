@@ -1,4 +1,4 @@
-package com.tmp.springtemplate.constant;
+package com.tmp.springtemplate.extension.openapi;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
