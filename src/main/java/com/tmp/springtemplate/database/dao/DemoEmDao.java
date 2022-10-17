@@ -11,16 +11,5 @@ public class DemoEmDao extends BaseEntityManagerDao {
         super(entityManager, entityManagerFactory);
     }
 
-    public Object demoSelectQuery() {
-
-        try {
-
-
-
-        } catch (Exception e) {
-
-        }
-
-    }
 
 }
