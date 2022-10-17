@@ -4,6 +4,7 @@ import com.tmp.springtemplate.database.jpa_repository.DemoRepository;
 import com.tmp.springtemplate.rest_api.ApiConstants;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +25,8 @@ public class DatabaseTestController {
 
     private final String controllerTag = "Test API Database Services";
 
-    private final DemoRepository demoRepository;
+    @Autowired
+    private DemoRepository demoRepository;
 
     //@formatter:off
     @Operation(

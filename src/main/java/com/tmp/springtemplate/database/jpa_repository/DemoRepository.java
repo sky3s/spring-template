@@ -22,7 +22,7 @@ public interface DemoRepository extends JpaRepository<DemoEntity, Long> {
     /*
     DİKKAT ET!: Buradaki tablo isimleri case-sensitive
      */
-    @Query(value = "SELECT D.* FROM demo_table D WHERE D.TEXT = :textFilter AND D.FLAG = :flagFilter", nativeQuery = true)
+    @Query(value = "SELECT D.* FROM demo_table D WHERE D.text = :textFilter AND D.flag = :flagFilter", nativeQuery = true)
     List<DemoEntity> getEntities(@Param("textFilter") String text, @Param("flagFilter") boolean flag);
 
 }

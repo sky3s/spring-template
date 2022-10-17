@@ -20,6 +20,7 @@ import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springdoc.core.customizers.OpenApiCustomiser;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -38,7 +39,9 @@ public class SwaggerConfig {
     private static final String HDR_PREFIX = "hdr";
     private static final String COMPONENTS_PREFIX = "#/components/parameters/" + HDR_PREFIX;
     private static final String API_IDENTIFIER_KEY = "x-api-id";
-    private final ApplicationConfig applicationConfig;
+
+    @Autowired
+    private ApplicationConfig applicationConfig;
 
 
     @Bean

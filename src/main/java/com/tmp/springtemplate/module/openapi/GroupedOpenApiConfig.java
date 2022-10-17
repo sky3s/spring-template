@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.BooleanUtils;
 import org.springdoc.core.GroupedOpenApi;
 import org.springdoc.core.customizers.OpenApiCustomiser;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.util.CollectionUtils;
@@ -20,8 +21,10 @@ import java.util.stream.Collectors;
 // @Profile({ AppEnvironment.DEVELOPMENT, AppEnvironment.UAT, AppEnvironment.PREP })
 public class GroupedOpenApiConfig {
 
-    private final ApplicationConfig applicationConfig;
+    @Autowired
+    private ApplicationConfig applicationConfig;
 
+    @Autowired
     private final OpenApiCustomiser openApiCustomiser;
 
 
