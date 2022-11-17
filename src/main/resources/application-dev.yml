@@ -14,7 +14,7 @@ spring:
     url: jdbc-path
     username: dummyuser
     password: dummypass
-    driver-class-name: org.mariadb.jdbc.Driver
+    driver-class-name: @driver-class-name@
   jpa:
     show-sql: true
     hibernate:

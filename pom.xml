@@ -35,7 +35,6 @@
 
         <!-- Spring DB Dependencies -->
         <spring-boot-starter-data-jpa.version>2.7.4</spring-boot-starter-data-jpa.version>
-        <mariadb-java-client.version>3.0.8</mariadb-java-client.version>
         <spring-jdbc.version>5.3.23</spring-jdbc.version>
 
 
@@ -133,12 +132,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
             <version>${spring-boot-starter-data-jpa.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.mariadb.jdbc</groupId>
-            <artifactId>mariadb-java-client</artifactId>
-            <version>${mariadb-java-client.version}</version>
         </dependency>
 
         <dependency>
@@ -293,6 +286,40 @@
 
 
     </dependencies>
+
+    <profiles>
+        <profile>
+            <id>db-mysql</id>
+            <properties>
+                <mysql-java-client.version>8.0.31</mysql-java-client.version>
+                <driver-class-name>com.mysql.cj.jdbc.Driver</driver-class-name>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>mysql</groupId>
+                    <artifactId>mysql-connector-java</artifactId>
+                    <version>${mysql-java-client.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>db-mariadb</id>
+            <properties>
+                <mariadb-java-client.version>3.0.8</mariadb-java-client.version>
+                <driver-class-name>org.mariadb.jdbc.Driver</driver-class-name>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>org.mariadb.jdbc</groupId>
+                    <artifactId>mariadb-java-client</artifactId>
+                    <version>${mariadb-java-client.version}</version>
+                </dependency>
+            </dependencies>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
+    </profiles>
 
 
     <build>
