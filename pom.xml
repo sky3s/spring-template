@@ -292,7 +292,7 @@
             <id>db-mysql</id>
             <properties>
                 <mysql-java-client.version>8.0.31</mysql-java-client.version>
-                <driver-class-name>com.mysql.cj.jdbc.Driver</driver-class-name>
+                <driver-class-name>com.mysql.jdbc.Driver</driver-class-name>
             </properties>
             <dependencies>
                 <dependency>
