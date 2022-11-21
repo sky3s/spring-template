@@ -1,4 +1,4 @@
-package com.tmp.springtemplate.database.dao;
+package com.tmp.springtemplate.demo.database.dao;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;

@@ -1,4 +1,4 @@
-package com.tmp.springtemplate.rest_api.test_api;
+package com.tmp.springtemplate.demo.rest_api.test_api.model;
 
 import com.tmp.springtemplate.extension.messaging.message_key.ExceptionMessageKey;
 import lombok.Getter;

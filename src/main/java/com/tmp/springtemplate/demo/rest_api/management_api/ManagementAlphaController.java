@@ -1,4 +1,4 @@
-package com.tmp.springtemplate.rest_api.app_api;
+package com.tmp.springtemplate.demo.rest_api.management_api;
 
 import com.tmp.springtemplate.extension.messaging.MessageHelper;
 import com.tmp.springtemplate.extension.messaging.message_key.ValidationMessageKey;
@@ -20,10 +20,10 @@ import java.util.Map;
  */
 @AllArgsConstructor
 @RestController
-@RequestMapping(value = {ApiConstants.API_PATH_APP_V1 + "/test"})
-public class AppTestController {
+@RequestMapping(value = {ApiConstants.API_PATH_MANAGEMENT_V1 + "/test"})
+public class ManagementAlphaController {
 
-    private static final String controllerTag = "App API Test Services";
+    private static final String controllerTag = "Management API Test Services";
 
 
     //@formatter:off
@@ -39,7 +39,7 @@ public class AppTestController {
         final Map<String, Object> response = new HashMap<>();
         response.put("boolField", true);
         response.put("strField", "demoField");
-        response.put("apiName", "App API");
+        response.put("apiName", "Management API");
         response.put("messageTR", MessageHelper.getMessage(ValidationMessageKey.DEMO_VALIDATION, AppConstants.TURKISH_LOCALE, "Param 1", "Param 2"));
         response.put("messageEN", MessageHelper.getMessage(ValidationMessageKey.DEMO_VALIDATION, AppConstants.ENGLISH_LOCALE, "Param 1", "Param 2"));
 

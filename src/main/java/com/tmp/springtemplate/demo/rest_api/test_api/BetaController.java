@@ -1,16 +1,17 @@
-package com.tmp.springtemplate.rest_api.test_api;
+package com.tmp.springtemplate.demo.rest_api.test_api;
 
 import com.tmp.springtemplate.extension.messaging.MessageHelper;
-import com.tmp.springtemplate.module.message.MessageUtils;
-import com.tmp.springtemplate.module.message.exception.ExceptionHelper;
 import com.tmp.springtemplate.extension.messaging.message_key.ExceptionMessageKey;
 import com.tmp.springtemplate.extension.messaging.message_key.ValidationMessageKey;
 import com.tmp.springtemplate.extension.openapi.AppHeader;
 import com.tmp.springtemplate.extension.request.RequestUtils;
-import com.tmp.springtemplate.rest_api.ApiConstants;
+import com.tmp.springtemplate.module.message.MessageUtils;
+import com.tmp.springtemplate.module.message.exception.ExceptionHelper;
+import com.tmp.springtemplate.demo.TestApiConstants;
+import com.tmp.springtemplate.demo.rest_api.test_api.model.RequestModel;
 import com.tmp.springtemplate.util.AppConstants;
 import io.swagger.v3.oas.annotations.Operation;
-import lombok.*;
+import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -24,7 +25,7 @@ import java.util.Map;
  */
 @AllArgsConstructor
 @RestController
-@RequestMapping(value = {ApiConstants.API_PATH_TEST_V1 + "/beta"})
+@RequestMapping(value = {TestApiConstants.API_PATH_TEST_V1 + "/beta"})
 public class BetaController {
 
     private final String controllerTag = "Beta App Services";

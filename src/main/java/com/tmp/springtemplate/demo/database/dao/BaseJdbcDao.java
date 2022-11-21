@@ -1,4 +1,4 @@
-package com.tmp.springtemplate.database.dao;
+package com.tmp.springtemplate.demo.database.dao;
 
 import lombok.AllArgsConstructor;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;

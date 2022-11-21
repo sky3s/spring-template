@@ -9,15 +9,10 @@ public class ApiConstants {
 
     public static final String API_PATH_V1 = "/v1";
 
-
-    public static final String API_PATH_TEST = "/test/api";
-
     public static final String API_PATH_APP = "/app/api";
 
     public static final String API_PATH_MANAGEMENT = "/management/api";
 
-
-    public static final String API_PATH_TEST_V1 = API_PATH_TEST + API_PATH_V1;
 
     public static final String API_PATH_APP_V1 = API_PATH_APP + API_PATH_V1;
 
